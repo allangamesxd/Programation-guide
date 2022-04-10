@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+const Discord = require("discord.js"); // Baixe o discord.js clicando em shell e digite lá npm i discord.js
 const client = new Discord.Client({intents: 32767});
 const config = require("./config.json");
-const moment = require("moment");
-const fs = require("fs");
+const moment = require("moment"); // digite na shell npm i moment
+const fs = require("fs"); // digite na shell npm i fs
 client.login(config.token); 
 
 
