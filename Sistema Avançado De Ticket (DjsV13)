@@ -1,0 +1,93 @@
+# Ticket Avançado
+
+Comando:
+
+const Discord = require("discord.js")
+
+module.exports = {
+    name: "t", // Coloque o nome do comando do arquivo
+    aliases: ["ticket"], // Coloque sinônimos aqui
+
+    run: async(client, message, args) => {
+
+        if (!message.member.permissions.has("ADMINISTRATOR")) {
+            message.reply(`Você não possui permissão para utilizar este comando.`)
+        } else {
+            let embed = new Discord.MessageEmbed()
+            .setColor("RANDOM")
+            .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ dynamic: true }) })
+            .setFooter({ text: message.guild.name, iconURL: message.guild.iconURL({ dynamic: true }) })
+            .setTimestamp(new Date())
+            .setDescription(`Abra um ticket selecionando o botão abaixo: \`🎫\`\nCaso não tenhha um motivo específico, não abra um ticket.`);
+
+            let botao = new Discord.MessageActionRow()
+            .addComponents(
+                new Discord.MessageButton()
+                .setCustomId("t")
+                .setEmoji("🎫")
+                .setStyle("SECONDARY")
+            );
+
+            message.channel.send({ embeds: [embed], components: [botao] }).then( () => {
+                message.delete()
+            });
+        }
+
+       
+        
+    }
+}
+
+
+Index:
+
+client.on("interactionCreate", (interaction) => {
+
+    if (interaction.isButton()) {
+
+        if (interaction.customId === "t") {
+            if (interaction.guild.channels.cache.find(c => c.name === `🎫-${interaction.user.id}`)) {
+                let c = interaction.guild.channels.cache.find(c => c.name === `🎫-${interaction.user.id}`);
+                interaction.reply({ content: `Você já possui um ticket aberto em ${c}.`, ephemeral: true })
+            } else {
+                interaction.guild.channels.create(`🎫-${interaction.user.id}`, {
+                    type: "GUILD_TEXT",
+                    //parent: "",
+                    permissionOverwrites: [
+                        {
+                            id: interaction.guild.id,
+                            deny: ["VIEW_CHANNEL"]
+                        },
+                        {
+                            id: interaction.user.id,
+                            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES", "ADD_REACTIONS"]
+                        }
+                    ]
+                }).then(c => {
+
+                    interaction.reply({ content: `Olá, seu ticket foi aberto em ${c}.`, ephemeral: true })
+
+                    let embed = new Discord.MessageEmbed()
+                    .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true }) })
+                    .setDescription(`Olá \`${interaction.user.username}\`, boas vindas ao seu ticket.\nAgurade alguns instantes para receber o suporte.\n\nFeche seu ticket com \`🔒\`.`);
+
+                    let botao = new Discord.MessageActionRow()
+                    .addComponents(
+                        new Discord.MessageButton()
+                        .setCustomId("tf")
+                        .setEmoji("🔒")
+                        .setStyle("SECONDARY")
+                    );
+
+                    c.send({ embeds: [embed], components: [botao] }).then(msg => msg.pin())
+                })
+            }
+        } else if (interaction.customId === "tf") {
+            interaction.reply(`\\🔒 Olá ${interaction.user}, este ticket será fechado em \`5 segundos\`...`).then(() => {
+                setTimeout(() => {
+                    interaction.channel.delete();
+                }, 5000)
+            })
+        }
+    }
+});
