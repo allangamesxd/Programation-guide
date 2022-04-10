@@ -1,6 +1,11 @@
 const Discord = require("discord.js");
 const config = require("../../config.json");
-
+/*
+Titulo: Comando de say
+Descrição: Um comando que faz o bot dalar algo por você
+Comando: say
+Sinônimos: [dizer]
+*/
 module.exports = {
     name: "say",
     aliases: ["dizer"],
