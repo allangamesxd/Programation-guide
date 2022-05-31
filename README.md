@@ -1,8 +1,5 @@
-# Inicio
-Para começar, esse guia vai ser usando a replit entre lá [clicando aqui ou clicando no link ao lado](https://repl.it)
-https://repl.it/
-# Créditos
-By: Olym,Allan,Luty
+# `Eae`
+Cheque o `main.py`!
 
-# Selecione a linguagem de programação
-Clique em main e selecione a linguagem de programação
+```js
+// eu sou iniciante no discord.py tbm k mais(allangamesxd) mais os comandos vão tá no main.py e o que eu vou aprendendo eu coloco lá```
